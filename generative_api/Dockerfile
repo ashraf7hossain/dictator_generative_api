@@ -3,7 +3,7 @@ FROM python:3.9-slim
 
 # Set environment variables to prevent Python from writing pyc files to disk and to ensure the app runs in production
 ENV PYTHONUNBUFFERED 1
-ENV FLASK_ENV=development
+ENV FLASK_ENV=production
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -21,5 +21,4 @@ COPY . /app/
 EXPOSE 5000
 
 # Define the command to run the Flask app with Gunicorn (production-ready WSGI server)
-# CMD ["flask", "run", "--host=0.0.0.0", "--port=5000", "--debugger"]
-CMD ["python", "app.py", "--host=0.0.0.0", "--port=5000", "--debugger"]
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000"]
