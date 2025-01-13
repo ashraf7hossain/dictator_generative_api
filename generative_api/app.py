@@ -22,7 +22,7 @@ GEMINI_API_KEY  = os.getenv("GEMINI_API_KEY")
 URL = os.getenv("URL")
 TTL = 3600 * 24
 
-
+#checking cd integration
 @app.route('/', methods=['GET'])
 def index():
     return jsonify({
