@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# navigate to the project directory
+cd ./dictator_generative_api
+echo "Changing directory to dictator_generative_api...$PWD"
+
 # Pull the latest changes from the GitHub repository
 echo "Pulling the latest code from GitHub..."
 git pull origin master
