@@ -9,14 +9,17 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Checkout the code
       - name: Checkout Code
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
 
-      - name: Set up SSH key 
-      - uses: webfactory/ssh-agent@v0.5.3
+      # Step 2: Set up SSH key to authenticate with EC2
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      # Step 3: Deploy to EC2 by running the deploy.sh script
       - name: Deploy
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.SERVER_IP }} 'bash -s' < deploy.sh
