@@ -41,6 +41,11 @@ def index():
                 "path": "/search_google",
                 "method": "POST",
                 "description": "Generate image from prompt"
+            },
+            {
+                "path": "/generate_code",
+                "method": "POST",
+                "description": "Generate code to a desired language"
             }
         ]
     })
@@ -120,6 +125,42 @@ def generate_story():
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
 
+
+@app.route('/generate_code', methods=['POST'])
+def generate_code():
+    data = request.get_json()
+    print(data)
+    code = data.get("code", "")
+    target_lang = data.get("target_lang", "")
+    
+    if code == '' or target_lang == '':
+        print("here is the error")
+        return jsonify({ "error" : "code and target_lang are required"}), 400
+    
+    print(data)
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={GEMINI_API_KEY}"
+
+    data = {
+        "contents": [
+            { "parts": [ { "text": f"Change the following { code } into {target_lang} syntax. write only code without comments, main function" } ] }
+        ]
+    }
+
+    try:
+        # Make the request to Google Gemini
+        headers = {
+            "Content-Type": "application/json"
+        }
+        response = requests.post(url, json=data, headers=headers)
+        response.raise_for_status()
+
+        # Parse response JSON
+        results = response.json()
+        return jsonify({"response": results}), 200
+
+    except requests.exceptions.RequestException as e:
+        return jsonify({"error": str(e)}), 500
+    
 
 if __name__ == '__main__':
     app.run(debug=True)
